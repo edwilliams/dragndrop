@@ -1,62 +1,59 @@
-import { resizedrag } from './resizedrag.js'
-const $block = document.getElementById('block')
-
-resizedrag(
-  $block,
-  $block,
-  () => {}, // onStart
-  () => {} // onEnd
-)
+import { resizedrag } from "./resizedrag.js"
 
 // ----------------------------------------------
 
-function RightClickContext(options) {
-  const items = options.items
-  const menu = document.createElement('ul')
-  menu.classList.add('right-click-menu')
+const addNewScreen = () => {
+  const $newScreen = document.createElement("div")
+  const $main = document.getElementById("main")
+  $newScreen.id = "new-screen"
+  $main.appendChild($newScreen)
 
-  items.forEach((item) => {
-    const menuItem = document.createElement('li')
-    menuItem.textContent = item.label
-    menuItem.addEventListener('click', function () {
-      item.onClick()
-      hide()
-    })
-    menu.appendChild(menuItem)
-  })
-
-  const show = (x, y) => {
-    menu.style.left = x + 'px'
-    menu.style.top = y + 'px'
-    document.body.appendChild(menu)
-  }
-
-  const hide = () => {
-    if (menu) document.body.removeChild(menu)
-  }
-
-  return {
-    show: show,
-    hide: hide,
-  }
+  resizedrag($newScreen)
 }
 
-const contextMenu = new RightClickContext({
-  items: [
-    {
-      label: 'Choose background',
-      onClick: () => {
-        $block.style.background = 'url()'
-      },
-    },
-  ],
+// ----------------------------------------------
+
+const addTextArea = () => {
+  const $newTextarea = document.createElement("div")
+  const $main = document.getElementById("main")
+  $newTextarea.id = "new-textarea"
+  $newTextarea.innerHTML = "<textarea>some editable content</textarea>"
+  $main.appendChild($newTextarea)
+
+  resizedrag($newTextarea)
+}
+
+// ----------------------------------------------
+
+const addButton = () => {
+  const $newButton = document.createElement("div")
+  const $main = document.getElementById("main")
+  $newButton.id = "new-button"
+  $newButton.innerHTML = '<button id="submit">submit</button>'
+  $main.appendChild($newButton)
+
+  resizedrag($newButton)
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.id === "add-textarea") {
+    addTextArea()
+  }
+
+  if (e.target.id === "add-button") {
+    addButton()
+  }
+
+  if (e.target.id === "submit") {
+    document.getElementById("main").innerHTML = ""
+    const el = document.getElementById("screen-title")
+    const screen = parseInt(el.dataset.screen)
+    el.innerHTML = "Screen " + (screen + 1)
+    el.dataset.screen = screen + 1
+    addNewScreen()
+  }
 })
 
-$block.addEventListener('contextmenu', function (e) {
-  e.preventDefault()
-  contextMenu.show(e.clientX, e.clientY)
-})
+// ----------------------------------------------
 
-document.addEventListener('click', () => {
-  contextMenu.hide()
-})
+addNewScreen()

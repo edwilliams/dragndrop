@@ -1,32 +1,15 @@
-# drag n drop
+# Drag 'n' Drop
 
 ## Context
 
-The idea behind this tool is for designers to very quickly prototype an idea. Ideally on a call with developers.
+The idea behind this tool is for designers to very quickly prototype an idea.
 
-each project can have multiple "screens"
+Ideally on a call with developers.
 
-each screen can have three things: images, clickable areas, various form inputs (starting with just textarea)
+Each project can have multiple "screens"
 
----
+Each screen can have a textarea or a button (more elements to follow)
 
-## Ideas
+The content of any form fields is arbitary
 
-- screens can be clonable
-- screens can be named
-
----
-
-## Basic user journey
-
-loads app on fresh screen: Screen A title
-click new area button => new draggable area
-click input button => new draggable input field
-click new screen button: screen goes blank with Screen B title
-right click area
-
----
-
-start with block on screen
-right click and select background
-create new input field
+Each button click leads to the next screen

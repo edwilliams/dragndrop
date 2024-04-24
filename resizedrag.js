@@ -2,12 +2,18 @@ let _loaded = false
 let _callbacks = []
 const _isTouch = window.ontouchstart !== undefined
 
-const resizedrag = function (target, handler, onStart, onEnd) {
+const resizedrag = function (
+  target,
+  handler,
+  onStart = () => {},
+  onEnd = () => {}
+) {
+  handler = handler || target
   let config = {
-    dragEnabled: target.dataset.rdDragEnabled !== 'false',
-    resizeEnabled: target.dataset.rdResizeEnabled !== 'false',
-    dragBorderEnabled: target.dataset.rdDragBorderEnabled !== 'false',
-    rdDragBoundary: target.dataset.rdDragBoundary === 'true',
+    dragEnabled: target.dataset.rdDragEnabled !== "false",
+    resizeEnabled: target.dataset.rdResizeEnabled !== "false",
+    dragBorderEnabled: target.dataset.rdDragBorderEnabled !== "false",
+    rdDragBoundary: target.dataset.rdDragBoundary === "true",
     minWidth: target.dataset.rdMinWidth ? target.dataset.rdMinWidth : 5,
     minHeight: target.dataset.rdMinHeight ? target.dataset.rdMinHeight : 5,
   }
@@ -52,9 +58,9 @@ const resizedrag = function (target, handler, onStart, onEnd) {
       }
       isResizing = edges.right || edges.bottom || edges.top || edges.left
       if (!isResizing) {
-        target.style['border-style'] = 'dashed'
-        target.style['border-color'] = 'grey'
-        target.style['border-width'] = '2px'
+        target.style["border-style"] = "dashed"
+        target.style["border-color"] = "grey"
+        target.style["border-width"] = "2px"
       }
       startX = target.offsetLeft - c.clientX
       startY = target.offsetTop - c.clientY
@@ -68,13 +74,13 @@ const resizedrag = function (target, handler, onStart, onEnd) {
       isResizing = false
       isMoving = false
       hasStarted = false
-      target.style['border'] = 'none'
+      target.style["border"] = "none"
     },
   }
   // Register a global event to capture mouse moves (once).
   if (!_loaded) {
     document.addEventListener(
-      _isTouch ? 'touchmove' : 'mousemove',
+      _isTouch ? "touchmove" : "mousemove",
       eventHandlers.mousemove
     )
   }
@@ -91,13 +97,13 @@ const resizedrag = function (target, handler, onStart, onEnd) {
   // On the first click and hold, record the offset of the pointer in relation
   // to the point of click inside the element.
   handler.addEventListener(
-    _isTouch ? 'touchstart' : 'mousedown',
+    _isTouch ? "touchstart" : "mousedown",
     eventHandlers.mousedown
   )
 
   // On leaving click, stop moving.
   document.addEventListener(
-    _isTouch ? 'touchend' : 'mouseup',
+    _isTouch ? "touchend" : "mouseup",
     eventHandlers.mouseup
   )
 
@@ -130,18 +136,18 @@ const resizedrag = function (target, handler, onStart, onEnd) {
     }
     if (isMoving) {
       if (!isResizing && config.dragEnabled) {
-        target.style.left = lastX + 'px'
-        target.style.top = lastY + 'px'
+        target.style.left = lastX + "px"
+        target.style.top = lastY + "px"
       } else {
         if (config.resizeEnabled) {
           let b = target.getBoundingClientRect()
           let bx = x - b.left
           let by = y - b.top
           if (edges.right) {
-            target.style.width = Math.max(bx, config.minWidth) + 'px'
+            target.style.width = Math.max(bx, config.minWidth) + "px"
           }
           if (edges.bottom) {
-            target.style.height = Math.max(by, config.minHeight) + 'px'
+            target.style.height = Math.max(by, config.minHeight) + "px"
           }
           if (edges.left) {
             var currentWidth = Math.max(
@@ -149,8 +155,8 @@ const resizedrag = function (target, handler, onStart, onEnd) {
               config.minWidth
             )
             if (currentWidth > config.minWidth) {
-              target.style.width = currentWidth + 'px'
-              target.style.left = x + 'px'
+              target.style.width = currentWidth + "px"
+              target.style.left = x + "px"
             }
           }
           if (edges.top) {
@@ -159,8 +165,8 @@ const resizedrag = function (target, handler, onStart, onEnd) {
               config.minHeight
             )
             if (currentHeight > config.minHeight) {
-              targetElement.style.height = currentHeight + 'px'
-              targetElement.style.top = y + 'px'
+              targetElement.style.height = currentHeight + "px"
+              targetElement.style.top = y + "px"
             }
           }
         }
@@ -178,17 +184,17 @@ const resizedrag = function (target, handler, onStart, onEnd) {
     edges.bottom = eY >= b.height - MARGINS
 
     if ((edges.right && edges.bottom) || (edges.left && edges.top)) {
-      targetElement.style.cursor = 'nwse-resize'
+      targetElement.style.cursor = "nwse-resize"
     } else if ((edges.right && edges.top) || (edges.bottom && edges.left)) {
-      targetElement.style.cursor = 'nesw-resize'
+      targetElement.style.cursor = "nesw-resize"
     } else if (edges.right || edges.left) {
-      targetElement.style.cursor = 'ew-resize'
+      targetElement.style.cursor = "ew-resize"
     } else if (edges.bottom || edges.top) {
-      targetElement.style.cursor = 'ns-resize'
+      targetElement.style.cursor = "ns-resize"
     } else if (eX > 0 && eX < b.width && eY > 0 && eY < b.height) {
-      targetElement.style.cursor = config.dragEnabled ? 'move' : 'not-allowed'
+      targetElement.style.cursor = config.dragEnabled ? "move" : "not-allowed"
     } else {
-      targetElement.style.cursor = 'default'
+      targetElement.style.cursor = "default"
     }
     let boundaryObj = {
       b: b,
